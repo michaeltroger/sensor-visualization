@@ -7,6 +7,7 @@ import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
@@ -28,11 +29,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mRealtimeScrolling = new RealtimeScrolling();
+
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         mBarometer = mSensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
-        mAccelerometerListener = new AccelerometerListener();
+        mAccelerometerListener = new AccelerometerListener(mRealtimeScrolling);
         mMagnetometerListener = new MagnetometerListener();
         mBarometerListener = new BarometerListener();
 
@@ -45,9 +48,9 @@ public class MainActivity extends AppCompatActivity {
                 new DataPoint(4, 6)
         });
         graph.addSeries(series);*/
-        mRealtimeScrolling = new RealtimeScrolling();
         GraphView graph = (GraphView) findViewById(R.id.graph);
         mRealtimeScrolling.initGraph(graph);
+
     }
 
     @Override
@@ -56,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
         mSensorManager.registerListener(mAccelerometerListener, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         mSensorManager.registerListener(mMagnetometerListener, mMagnetometer, SensorManager.SENSOR_DELAY_NORMAL);
         mSensorManager.registerListener(mBarometerListener, mBarometer, SensorManager.SENSOR_DELAY_NORMAL);
-        mRealtimeScrolling.onResume();
     }
 
     @Override
@@ -65,6 +67,9 @@ public class MainActivity extends AppCompatActivity {
         mSensorManager.unregisterListener(mAccelerometerListener);
         mSensorManager.unregisterListener(mMagnetometerListener);
         mSensorManager.unregisterListener(mBarometerListener);
-        mRealtimeScrolling.onPause();
+    }
+
+    public void clickTag(View view) {
+        mRealtimeScrolling.printTag();
     }
 }

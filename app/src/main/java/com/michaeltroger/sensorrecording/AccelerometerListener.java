@@ -11,12 +11,18 @@ import java.util.Date;
 
 public class AccelerometerListener implements SensorEventListener {
     private final String TAG = getClass().getSimpleName();
+    private RealtimeScrolling mRealtimeScrolling;
+
+    public AccelerometerListener(RealtimeScrolling realtimeScrolling) {
+        mRealtimeScrolling = realtimeScrolling;
+    }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
         long timeInMillis = System.currentTimeMillis() + ((event.timestamp- SystemClock.elapsedRealtimeNanos())/1000000L);
-        Log.d(TAG, "time:");
-        Log.d(TAG, new Date(timeInMillis).toString());
+        Date date = new Date(timeInMillis);
+        Log.d(TAG, date.toString());
+        mRealtimeScrolling.printSensorData(event.values);
 
         float[] sensorValues = event.values;
         String sensorValuesPrintable = event.sensor.getName() + ":";
