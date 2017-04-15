@@ -10,8 +10,16 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.michaeltroger.sensorrecording.MainActivity">
 
-    <TextView
+    <com.jjoe64.graphview.GraphView
+        android:layout_width="match_parent"
+        android:layout_height="200dip"
+        android:id="@+id/graph" />
+    <Button
+        android:text="@string/tag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/button" />
 </RelativeLayout>
