@@ -3,28 +3,20 @@ package com.michaeltroger.sensorrecording;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.Handler;
 import android.os.SystemClock;
 import android.view.View;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.LegendRenderer;
-import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.jjoe64.graphview.series.PointsGraphSeries;
 
-import java.util.Random;
 
 
 public class RealtimeScrolling {
-    private final Handler mHandler = new Handler();
-    private Runnable mTimer;
-    private double graphLastXValue = 5d;
     private LineGraphSeries<DataPoint> mSeriesXAxis;
-    private double mLastRandom = 2;
-    private Random mRand = new Random();
     private long time = System.currentTimeMillis();
     private LineGraphSeries<DataPoint> mSeriesYAxis;
     private LineGraphSeries<DataPoint> mSeriesZAxis;
@@ -82,15 +74,7 @@ public class RealtimeScrolling {
 
         startTime = SystemClock.elapsedRealtimeNanos();
     }
-    public void onCreate() {
 
-    }
-
-    public void onResume() {
-    }
-
-    public void onPause() {
-    }
 
     public void printSensorData(long nanoseconds, float[] value) {
         long now = System.currentTimeMillis();
