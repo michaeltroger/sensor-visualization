@@ -49,7 +49,7 @@ public class RealtimeScrolling {
         mSeriesYAxis.setTitle("y");
 
         mSeriesZAxis = new LineGraphSeries<>();
-        mSeriesZAxis.setColor(Color.YELLOW);
+        mSeriesZAxis.setColor(Color.GREEN);
         mSeriesZAxis.setTitle("z");
 
         graph.addSeries(mSeriesXAxis);
