@@ -8,6 +8,7 @@ import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
+import com.jjoe64.graphview.series.PointsGraphSeries;
 
 import java.util.Random;
 
@@ -22,7 +23,7 @@ public class RealtimeScrolling {
     private long time = System.currentTimeMillis();
     private LineGraphSeries<DataPoint> mSeriesYAxis;
     private LineGraphSeries<DataPoint> mSeriesZAxis;
-    private LineGraphSeries<DataPoint> mTagSeries;
+    private PointsGraphSeries<DataPoint> mTagSeries;
 
     public void initGraph(GraphView graph) {
         graph.getViewport().setXAxisBoundsManual(true);
@@ -53,9 +54,12 @@ public class RealtimeScrolling {
 
         graph.getLegendRenderer().setVisible(true);
         graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
- 
-        mTagSeries = new LineGraphSeries<>();
+
+        mTagSeries = new PointsGraphSeries<>();
+        mTagSeries.setShape(PointsGraphSeries.Shape.RECTANGLE);
+        mTagSeries.setSize(10);
         mTagSeries.setColor(Color.BLACK);
+        mTagSeries.setTitle("tag");
         graph.addSeries(mTagSeries);
     }
     public void onCreate() {
@@ -70,7 +74,7 @@ public class RealtimeScrolling {
 
     public void printSensorData(float[] value) {
         long now = System.currentTimeMillis();
-        if (now - time > 10) {
+        if (now - time > 100) {
             graphLastXValue += 0.25;
             mSeriesXAxis.appendData(new DataPoint(graphLastXValue, value[0]), true, 1000);
             mSeriesYAxis.appendData(new DataPoint(graphLastXValue, value[1]), false, 1000);
@@ -80,8 +84,7 @@ public class RealtimeScrolling {
     }
 
     public void printTag() {
-        mTagSeries.appendData(new DataPoint(graphLastXValue, 10), false, 100);
-        mTagSeries.appendData(new DataPoint(graphLastXValue, -10), false, 100);
+        mTagSeries.appendData(new DataPoint(graphLastXValue, 0), false, 100);
     }
 
 }
