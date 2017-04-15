@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.view.View;
 
 import com.jjoe64.graphview.GraphView;
@@ -28,6 +29,8 @@ public class RealtimeScrolling {
     private LineGraphSeries<DataPoint> mSeriesYAxis;
     private LineGraphSeries<DataPoint> mSeriesZAxis;
     private PointsGraphSeries<DataPoint> mTagSeries;
+    private long startTime = SystemClock.elapsedRealtimeNanos();
+    float seconds;
 
     public void initGraph(GraphView graph) {
         graph.getViewport().setXAxisBoundsManual(true);
@@ -42,7 +45,7 @@ public class RealtimeScrolling {
         graph.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mTagSeries.appendData(new DataPoint(graphLastXValue, 0), false, 100);
+                mTagSeries.appendData(new DataPoint(seconds, 0), false, 100);
             }
         });
         mSeriesXAxis = new LineGraphSeries<>();
@@ -76,6 +79,8 @@ public class RealtimeScrolling {
         mTagSeries.setColor(Color.BLACK);
         mTagSeries.setTitle("tag");
         graph.addSeries(mTagSeries);
+
+        startTime = SystemClock.elapsedRealtimeNanos();
     }
     public void onCreate() {
 
@@ -87,13 +92,13 @@ public class RealtimeScrolling {
     public void onPause() {
     }
 
-    public void printSensorData(float[] value) {
+    public void printSensorData(long nanoseconds, float[] value) {
         long now = System.currentTimeMillis();
         if (now - time > 100) {
-            graphLastXValue += 0.25;
-            mSeriesXAxis.appendData(new DataPoint(graphLastXValue, value[0]), true, 1000);
-            mSeriesYAxis.appendData(new DataPoint(graphLastXValue, value[1]), false, 1000);
-            mSeriesZAxis.appendData(new DataPoint(graphLastXValue, value[2]), false, 1000);
+            seconds = (nanoseconds - startTime) / 1000000000f;
+            mSeriesXAxis.appendData(new DataPoint(seconds, value[0]), true, 1000);
+            mSeriesYAxis.appendData(new DataPoint(seconds, value[1]), false, 1000);
+            mSeriesZAxis.appendData(new DataPoint(seconds, value[2]), false, 1000);
             time = now;
         }
     }

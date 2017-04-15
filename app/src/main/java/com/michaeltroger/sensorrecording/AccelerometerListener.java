@@ -22,7 +22,7 @@ public class AccelerometerListener implements SensorEventListener {
         long timeInMillis = System.currentTimeMillis() + ((event.timestamp- SystemClock.elapsedRealtimeNanos())/1000000L);
         Date date = new Date(timeInMillis);
         Log.d(TAG, date.toString());
-        mRealtimeScrolling.printSensorData(event.values);
+        mRealtimeScrolling.printSensorData(event.timestamp, event.values);
 
         float[] sensorValues = event.values;
         String sensorValuesPrintable = event.sensor.getName() + ":";
