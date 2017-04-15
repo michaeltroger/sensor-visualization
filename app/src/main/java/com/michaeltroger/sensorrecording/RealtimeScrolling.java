@@ -36,7 +36,6 @@ public class RealtimeScrolling {
         mTimer = new Runnable() {
             @Override
             public void run() {
-                Log.d("test", "test");
                 graphLastXValue += 0.25d;
                 mSeries.appendData(new DataPoint(graphLastXValue, getRandom()), true, 22);
                 mHandler.postDelayed(this, 330);

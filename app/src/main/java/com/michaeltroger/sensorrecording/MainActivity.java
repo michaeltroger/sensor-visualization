@@ -14,7 +14,6 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final java.lang.String ARG_SECTION_NUMBER = "a";
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
     private AccelerometerListener mAccelerometerListener;
