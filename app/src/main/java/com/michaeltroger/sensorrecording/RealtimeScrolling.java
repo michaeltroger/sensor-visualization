@@ -80,9 +80,9 @@ public class RealtimeScrolling {
         long now = System.currentTimeMillis();
         if (now - time > 100) {
             seconds = (nanoseconds - startTime) / 1000000000f;
-            mSeriesXAxis.appendData(new DataPoint(seconds, value[0]), true, 1000);
-            mSeriesYAxis.appendData(new DataPoint(seconds, value[1]), false, 1000);
-            mSeriesZAxis.appendData(new DataPoint(seconds, value[2]), false, 1000);
+            mSeriesXAxis.appendData(new DataPoint(seconds, value[0]), true, 100);
+            mSeriesYAxis.appendData(new DataPoint(seconds, value[1]), false, 100);
+            mSeriesZAxis.appendData(new DataPoint(seconds, value[2]), false, 100);
             time = now;
         }
     }
