@@ -69,7 +69,4 @@ public class MainActivity extends AppCompatActivity {
         mSensorManager.unregisterListener(mBarometerListener);
     }
 
-    public void clickTag(View view) {
-        mRealtimeScrolling.printTag();
-    }
 }

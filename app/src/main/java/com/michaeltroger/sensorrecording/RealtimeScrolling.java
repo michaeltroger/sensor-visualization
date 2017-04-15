@@ -1,12 +1,16 @@
 package com.michaeltroger.sensorrecording;
 
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Handler;
+import android.view.View;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.jjoe64.graphview.series.PointsGraphSeries;
 
@@ -35,7 +39,12 @@ public class RealtimeScrolling {
         graph.getViewport().setMaxY(10);
 
         graph.getGridLabelRenderer().setLabelVerticalWidth(100);
-
+        graph.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mTagSeries.appendData(new DataPoint(graphLastXValue, 0), false, 100);
+            }
+        });
         mSeriesXAxis = new LineGraphSeries<>();
         mSeriesXAxis.setColor(Color.RED);
         mSeriesXAxis.setTitle("x");
@@ -56,7 +65,13 @@ public class RealtimeScrolling {
         graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
 
         mTagSeries = new PointsGraphSeries<>();
-        mTagSeries.setShape(PointsGraphSeries.Shape.RECTANGLE);
+        mTagSeries.setCustomShape(new PointsGraphSeries.CustomShape() {
+            @Override
+            public void draw(Canvas canvas, Paint paint, float x, float y, DataPointInterface dataPoint) {
+                paint.setStrokeWidth(5);
+                canvas.drawLine(x, 0, x, canvas.getHeight(), paint);
+            }
+        });
         mTagSeries.setSize(10);
         mTagSeries.setColor(Color.BLACK);
         mTagSeries.setTitle("tag");
@@ -83,8 +98,5 @@ public class RealtimeScrolling {
         }
     }
 
-    public void printTag() {
-        mTagSeries.appendData(new DataPoint(graphLastXValue, 0), false, 100);
-    }
 
 }
