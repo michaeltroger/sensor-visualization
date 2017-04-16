@@ -1,4 +1,4 @@
-package com.michaeltroger.sensorrecording;
+package com.michaeltroger.sensorvisualization;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -6,15 +6,15 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.jjoe64.graphview.GraphView;
 
 import java.util.List;
+
+import de.psdev.licensesdialog.LicensesDialog;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
@@ -34,9 +34,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         List<Sensor> sensors = mSensorManager.getSensorList(Sensor.TYPE_ALL);
         mSensor = sensors.get(0);
 
-        LinearLayout availableSensorsContainer = (LinearLayout) findViewById(R.id.available_sensors);
-        final RadioGroup radioGroup = new RadioGroup(this);
-        radioGroup.setOrientation(RadioGroup.VERTICAL);
+        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.available_sensors);
 
         int id = 0;
         for(final Sensor sensor : sensors){
@@ -55,7 +53,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 }
             });
         }
-        availableSensorsContainer.addView(radioGroup);
 
         RadioButton radioButton = (RadioButton) radioGroup.getChildAt(0);
         radioButton.setChecked(true);
@@ -81,4 +78,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {}
+
+    public void licenseInfo(View view) {
+        new LicensesDialog.Builder(this)
+                .setNotices(R.raw.notices)
+                .setIncludeOwnLicense(true)
+                .build()
+                .show();
+    }
 }

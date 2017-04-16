@@ -1,4 +1,4 @@
-package com.michaeltroger.sensorrecording;
+package com.michaeltroger.sensorvisualization;
 
 import org.junit.Test;
 

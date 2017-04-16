@@ -1,4 +1,4 @@
-package com.michaeltroger.sensorrecording;
+package com.michaeltroger.sensorvisualization;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

@@ -1,4 +1,4 @@
-package com.michaeltroger.sensorrecording;
+package com.michaeltroger.sensorvisualization;
 
 import android.graphics.Color;
 import android.os.SystemClock;
@@ -18,7 +18,7 @@ class Graph {
     private static final float VALUE = 1;
     private final Random mRandom;
     private float mHue;
-    private long startTime = SystemClock.elapsedRealtimeNanos();
+    private long mStartTime = SystemClock.elapsedRealtimeNanos();
     private GraphView mGraphView;
     private List<LineGraphSeries<DataPoint>> mSeries = new ArrayList<>();
 
@@ -34,7 +34,7 @@ class Graph {
         mGraphView.getLegendRenderer().setVisible(true);
         mGraphView.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
 
-        startTime = SystemClock.elapsedRealtimeNanos();
+        mStartTime = SystemClock.elapsedRealtimeNanos();
     }
 
 
@@ -42,7 +42,7 @@ class Graph {
         if (mSeries.size() == 0) {
             fillSeries(sensorValues);
         }
-        float seconds = (nanoseconds - startTime) / 1000000000f;
+        float seconds = (nanoseconds - mStartTime) / 1000000000f;
         for (int i = 0; i < sensorValues.length; i++) {
             mSeries.get(i).appendData(new DataPoint(seconds, sensorValues[i]), true, 100);
         }
@@ -61,7 +61,7 @@ class Graph {
         mSeries.clear();
         mGraphView.removeAllSeries();
 
-        startTime = SystemClock.elapsedRealtimeNanos();
+        mStartTime = SystemClock.elapsedRealtimeNanos();
     }
 
     private int getRandomColor(){

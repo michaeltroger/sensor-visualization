@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.michaeltroger.sensorrecording.MainActivity">
+    tools:context="com.michaeltroger.sensorvisualization.MainActivity">
     <LinearLayout
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -15,16 +15,15 @@
             android:layout_width="match_parent"
             android:layout_height="200dip"
             android:id="@+id/graph" />
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+        <RadioGroup
             android:id="@+id/available_sensors"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"></LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
 
-
-
-
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/licenses"
+            android:onClick="licenseInfo"/>
     </LinearLayout>
 </ScrollView>
