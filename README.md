@@ -1,5 +1,7 @@
 #Simple Real Time Sensor Visualization for Android
 
+<img src="/screenshot.png" alt="Sensor Visualization" width="400px"/>
+
 This simple application supports the real time visualization of all sensor data of your phone in form of a line graph.
 It does not feature a description of what kind of data has been acquired and also no unit information for the sensor data is shown. It outputs the data just as they come in provided by Google's APIs.
 
