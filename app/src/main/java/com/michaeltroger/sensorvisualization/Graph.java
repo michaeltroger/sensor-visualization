@@ -16,6 +16,7 @@ import java.util.Random;
 class Graph {
     private static final float SATURATION = 1;
     private static final float VALUE = 1;
+    private static final int SECONDS_TO_SHOW = 10;
     private final Random mRandom;
     private float mHue;
     private long mStartTime = SystemClock.elapsedRealtimeNanos();
@@ -27,9 +28,7 @@ class Graph {
         mGraphView = graphView;
         mGraphView.getViewport().setXAxisBoundsManual(true);
         mGraphView.getViewport().setMinX(0);
-        mGraphView.getViewport().setMaxX(4);
-
-        mGraphView.getGridLabelRenderer().setLabelVerticalWidth(100);
+        mGraphView.getViewport().setMaxX(SECONDS_TO_SHOW);
 
         mGraphView.getLegendRenderer().setVisible(true);
         mGraphView.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
