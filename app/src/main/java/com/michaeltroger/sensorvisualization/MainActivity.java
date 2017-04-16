@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 
-    public void licenseInfo(View view) {
+    public void showLicenseInfo(View view) {
         new LicensesDialog.Builder(this)
                 .setNotices(R.raw.notices)
                 .setIncludeOwnLicense(true)
