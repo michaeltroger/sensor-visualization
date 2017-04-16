@@ -8,56 +8,77 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
     private SensorManager mSensorManager;
-    private Sensor mAccelerometer;
-    private AccelerometerListener mAccelerometerListener;
-    private Sensor mMagnetometer;
-    private MagnetometerListener mMagnetometerListener;
-    private Sensor mBarometer;
-    private BarometerListener mBarometerListener;
-    private RealtimeScrolling mRealtimeScrolling;
+    private Sensor mSensor;
+    private Graph mGraph;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mRealtimeScrolling = new RealtimeScrolling();
+        GraphView graphView = (GraphView) findViewById(R.id.graph);
+        mGraph = new Graph(graphView);
 
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        mBarometer = mSensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
-        mAccelerometerListener = new AccelerometerListener(mRealtimeScrolling);
-        mMagnetometerListener = new MagnetometerListener();
-        mBarometerListener = new BarometerListener();
+        List<Sensor> sensors = mSensorManager.getSensorList(Sensor.TYPE_ALL);
+        mSensor = sensors.get(0);
 
-        GraphView graph = (GraphView) findViewById(R.id.graph);
-        mRealtimeScrolling.initGraph(graph);
+        LinearLayout availableSensorsContainer = (LinearLayout) findViewById(R.id.available_sensors);
+        final RadioGroup radioGroup = new RadioGroup(this);
+        radioGroup.setOrientation(RadioGroup.VERTICAL);
 
+        int id = 0;
+        for(final Sensor sensor : sensors){
+            RadioButton radioButton = new RadioButton(this);
+            radioButton.setText(sensor.getName());
+            radioButton.setId(id++);
+            radioGroup.addView(radioButton);
+
+            radioButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mSensorManager.unregisterListener(MainActivity.this);
+                    mSensor = sensor;
+                    mSensorManager.registerListener(MainActivity.this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
+                    mGraph.reset();
+                }
+            });
+        }
+        availableSensorsContainer.addView(radioGroup);
+
+        RadioButton radioButton = (RadioButton) radioGroup.getChildAt(0);
+        radioButton.setChecked(true);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mSensorManager.registerListener(mAccelerometerListener, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-        mSensorManager.registerListener(mMagnetometerListener, mMagnetometer, SensorManager.SENSOR_DELAY_NORMAL);
-        mSensorManager.registerListener(mBarometerListener, mBarometer, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        mGraph.reset();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mSensorManager.unregisterListener(mAccelerometerListener);
-        mSensorManager.unregisterListener(mMagnetometerListener);
-        mSensorManager.unregisterListener(mBarometerListener);
+        mSensorManager.unregisterListener(this);
     }
 
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        mGraph.printSensorData(event.timestamp, event.values);
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 }
