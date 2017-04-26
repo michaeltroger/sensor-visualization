@@ -43,7 +43,7 @@ class Graph {
         }
         float seconds = (nanoseconds - mStartTime) / 1000000000f;
         for (int i = 0; i < sensorValues.length; i++) {
-            mSeries.get(i).appendData(new DataPoint(seconds, sensorValues[i]), true, 100);
+            mSeries.get(i).appendData(new DataPoint(seconds, sensorValues[i]), true, 1000);
         }
     }
 
