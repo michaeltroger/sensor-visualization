@@ -1,4 +1,4 @@
-#Simple Real Time Sensor Visualization for Android
+# Simple Real Time Sensor Visualization for Android
 
 <img src="/screenshot.png" alt="Sensor Visualization" width="400px"/>
 
