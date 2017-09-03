@@ -64,8 +64,8 @@ class Graph implements IGraph {
 
             mSeries.add(series);
             mGraphView.addSeries(series);
-            mGraphView.getLegendRenderer().resetStyles();
         }
+        mGraphView.getLegendRenderer().resetStyles();
     }
 
     @Override
