@@ -2,6 +2,7 @@ package com.michaeltroger.sensorvisualization;
 
 import android.graphics.Color;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.LegendRenderer;
@@ -12,18 +13,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-
 class Graph {
     private static final float SATURATION = 1;
     private static final float VALUE = 1;
     private static final int SECONDS_TO_SHOW = 10;
+
     private final Random mRandom;
     private float mHue;
     private long mStartTime = SystemClock.elapsedRealtimeNanos();
-    private GraphView mGraphView;
-    private List<LineGraphSeries<DataPoint>> mSeries = new ArrayList<>();
+    private final GraphView mGraphView;
+    private final List<LineGraphSeries<DataPoint>> mSeries = new ArrayList<>();
 
-    Graph(GraphView graphView) {
+    Graph(@NonNull final GraphView graphView) {
         mRandom = new Random();
         mGraphView = graphView;
         mGraphView.getViewport().setXAxisBoundsManual(true);
@@ -36,20 +37,19 @@ class Graph {
         mStartTime = SystemClock.elapsedRealtimeNanos();
     }
 
-
-    void printSensorData(long nanoseconds, float[] sensorValues) {
-        if (mSeries.size() == 0) {
+    void printSensorData(final long nanoseconds, @NonNull final float[] sensorValues) {
+        if (mSeries.isEmpty()) {
             fillSeries(sensorValues);
         }
-        float seconds = (nanoseconds - mStartTime) / 1000000000f;
+        final float seconds = (nanoseconds - mStartTime) / 1000000000f;
         for (int i = 0; i < sensorValues.length; i++) {
             mSeries.get(i).appendData(new DataPoint(seconds, sensorValues[i]), true, 1000);
         }
     }
 
-    private void fillSeries(float[] sensorValues) {
-        for (int i = 0; i < sensorValues.length; i++) {
-            LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
+    private void fillSeries(@NonNull final float[] sensorValues) {
+        for (float sensorValue : sensorValues) {
+            final LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
             series.setColor(getRandomColor());
             mSeries.add(series);
             mGraphView.addSeries(series);
@@ -63,7 +63,7 @@ class Graph {
         mStartTime = SystemClock.elapsedRealtimeNanos();
     }
 
-    private int getRandomColor(){
+    private int getRandomColor() {
         mHue = (mHue + 36 + 240f * mRandom.nextFloat()) % 360f;
         return Color.HSVToColor(new float[]{mHue, SATURATION, VALUE});
     }

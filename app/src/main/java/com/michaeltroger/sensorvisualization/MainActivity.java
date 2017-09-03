@@ -4,6 +4,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -27,35 +28,35 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        GraphView graphView = (GraphView) findViewById(R.id.graph);
+        final GraphView graphView = findViewById(R.id.graph);
         mGraph = new Graph(graphView);
 
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-        List<Sensor> sensors = mSensorManager.getSensorList(Sensor.TYPE_ALL);
+        final List<Sensor> sensors = mSensorManager.getSensorList(Sensor.TYPE_ALL);
         mSensor = sensors.get(0);
 
-        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.available_sensors);
+        final RadioGroup radioGroup = findViewById(R.id.available_sensors);
+        setupRadioButtons(sensors, radioGroup);
 
+        final RadioButton radioButton = (RadioButton) radioGroup.getChildAt(0);
+        radioButton.setChecked(true);
+    }
+
+    private void setupRadioButtons(@NonNull final List<Sensor> sensors, @NonNull final RadioGroup radioGroup) {
         int id = 0;
         for(final Sensor sensor : sensors){
-            RadioButton radioButton = new RadioButton(this);
+            final RadioButton radioButton = new RadioButton(this);
             radioButton.setText(sensor.getName());
             radioButton.setId(id++);
             radioGroup.addView(radioButton);
 
-            radioButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mSensorManager.unregisterListener(MainActivity.this);
-                    mSensor = sensor;
-                    mSensorManager.registerListener(MainActivity.this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
-                    mGraph.reset();
-                }
+            radioButton.setOnClickListener(v -> {
+                mSensorManager.unregisterListener(MainActivity.this);
+                mSensor = sensor;
+                mSensorManager.registerListener(MainActivity.this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
+                mGraph.reset();
             });
         }
-
-        RadioButton radioButton = (RadioButton) radioGroup.getChildAt(0);
-        radioButton.setChecked(true);
     }
 
     @Override
@@ -77,9 +78,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // accuracy is expected to not change
+    }
 
-    public void showLicenseInfo(View view) {
+    public void showLicenseInfo(@NonNull final View view) {
         new LicensesDialog.Builder(this)
                 .setNotices(R.raw.notices)
                 .setIncludeOwnLicense(true)
