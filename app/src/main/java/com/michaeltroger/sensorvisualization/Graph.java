@@ -53,7 +53,7 @@ class Graph implements IGraph {
     }
 
     private void fillSeries(@NonNull final float[] sensorValues, final int sensorType) {
-        String[] legend = SensorLegend.getLegend(sensorType);
+        final String[] legend = SensorLegend.getLegend(sensorType);
 
         for (int i = 0; i < sensorValues.length; i++) {
             final LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
