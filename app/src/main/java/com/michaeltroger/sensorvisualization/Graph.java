@@ -1,6 +1,7 @@
 package com.michaeltroger.sensorvisualization;
 
 import android.graphics.Color;
+import android.hardware.SensorEvent;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-class Graph {
+class Graph implements IGraph {
     private static final float SATURATION = 1;
     private static final float VALUE = 1;
     private static final int SECONDS_TO_SHOW = 10;
@@ -37,9 +38,13 @@ class Graph {
         mStartTime = SystemClock.elapsedRealtimeNanos();
     }
 
-    void printSensorData(final long nanoseconds, @NonNull final float[] sensorValues) {
+    @Override
+    public void printSensorData(@NonNull final SensorEvent event) {
+        final long nanoseconds = event.timestamp;
+        final float[] sensorValues = event.values;
+        final int sensorType = event.sensor.getType();
         if (mSeries.isEmpty()) {
-            fillSeries(sensorValues);
+            fillSeries(sensorValues, sensorType);
         }
         final float seconds = (nanoseconds - mStartTime) / 1000000000f;
         for (int i = 0; i < sensorValues.length; i++) {
@@ -47,16 +52,24 @@ class Graph {
         }
     }
 
-    private void fillSeries(@NonNull final float[] sensorValues) {
-        for (float sensorValue : sensorValues) {
+    private void fillSeries(@NonNull final float[] sensorValues, final int sensorType) {
+        String[] legend = SensorLegend.getLegend(sensorType);
+
+        for (int i = 0; i < sensorValues.length; i++) {
             final LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
             series.setColor(getRandomColor());
+            if (i < legend.length) {
+                series.setTitle(legend[i]);
+            }
+
             mSeries.add(series);
             mGraphView.addSeries(series);
+            mGraphView.getLegendRenderer().resetStyles();
         }
     }
 
-    void reset() {
+    @Override
+    public void reset() {
         mSeries.clear();
         mGraphView.removeAllSeries();
 

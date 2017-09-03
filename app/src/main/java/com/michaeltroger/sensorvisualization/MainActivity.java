@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        mGraph.printSensorData(event.timestamp, event.values);
+        mGraph.printSensorData(event);
     }
 
     @Override
