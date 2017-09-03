@@ -1,5 +1,6 @@
 package com.michaeltroger.sensorvisualization;
 
+import android.databinding.DataBindingUtil;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -11,13 +12,15 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.jjoe64.graphview.GraphView;
+import com.michaeltroger.sensorvisualization.databinding.ActivityMainBinding;
 
 import java.util.List;
 
 import de.psdev.licensesdialog.LicensesDialog;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
+
+    private ActivityMainBinding binding;
 
     private SensorManager mSensorManager;
     private Sensor mSensor;
@@ -28,17 +31,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final GraphView graphView = findViewById(R.id.graph);
-        mGraph = new Graph(graphView);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        binding.setHandlers(new MyHandlers());
+
+        mGraph = new Graph(binding.graph);
 
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         final List<Sensor> sensors = mSensorManager.getSensorList(Sensor.TYPE_ALL);
         mSensor = sensors.get(0);
 
-        final RadioGroup radioGroup = findViewById(R.id.available_sensors);
-        setupRadioButtons(sensors, radioGroup);
+        setupRadioButtons(sensors, binding.availableSensors);
 
-        final RadioButton radioButton = (RadioButton) radioGroup.getChildAt(0);
+        final RadioButton radioButton = (RadioButton) binding.availableSensors.getChildAt(0);
         radioButton.setChecked(true);
     }
 
@@ -82,11 +86,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         // accuracy is expected to not change
     }
 
-    public void showLicenseInfo(@NonNull final View view) {
-        new LicensesDialog.Builder(this)
-                .setNotices(R.raw.notices)
-                .setIncludeOwnLicense(true)
-                .build()
-                .show();
+    public class MyHandlers {
+        public void showLicenseInfo(View view) {
+            new LicensesDialog.Builder(MainActivity.this)
+                    .setNotices(R.raw.notices)
+                    .setIncludeOwnLicense(true)
+                    .build()
+                    .show();
+        }
     }
 }
