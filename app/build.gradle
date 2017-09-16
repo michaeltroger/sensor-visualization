@@ -1,13 +1,5 @@
 apply plugin: 'com.android.application'
 
-allprojects {
-    repositories {
-        jcenter()
-        maven {
-            url "https://maven.google.com"
-        }
-    }
-}
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
@@ -44,6 +36,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
+    compile 'com.michaeltroger.sensorvaluelegend:sensorvaluelegend:1.0.0'
     compile 'com.android.support:appcompat-v7:26.0.2'
     compile 'com.jjoe64:graphview:4.2.1'
     compile 'de.psdev.licensesdialog:licensesdialog:1.8.2'

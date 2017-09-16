@@ -9,6 +9,7 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
+import com.michaeltroger.sensorvaluelegend.SensorValueLegend;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +54,7 @@ class Graph implements IGraph {
     }
 
     private void fillSeries(@NonNull final float[] sensorValues, final int sensorType) {
-        final String[] legend = SensorLegend.getLegend(sensorType);
+        final String[] legend = SensorValueLegend.getLegend(sensorType);
 
         for (int i = 0; i < sensorValues.length; i++) {
             final LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
