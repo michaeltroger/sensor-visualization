@@ -12,11 +12,23 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.jjoe64.graphview.GraphView
-                android:layout_width="match_parent"
-                android:layout_height="200dip"
-                android:id="@+id/graph" />
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
+                <com.jjoe64.graphview.GraphView
+                    android:layout_width="match_parent"
+                    android:layout_height="200dip"
+                    android:id="@+id/graph" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/sensor_not_supported"
+                    android:visibility="invisible"
+                    android:gravity="center"
+                    android:text="@string/sensor_not_supported"/>
+            </FrameLayout>
             <RadioGroup
                 android:id="@+id/available_sensors"
                 android:layout_height="wrap_content"

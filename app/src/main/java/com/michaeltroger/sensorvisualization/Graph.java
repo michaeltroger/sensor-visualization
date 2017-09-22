@@ -4,6 +4,8 @@ import android.graphics.Color;
 import android.hardware.SensorEvent;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
+import android.view.View;
+import android.widget.TextView;
 
 import com.google.common.base.Optional;
 import com.jjoe64.graphview.GraphView;
@@ -22,19 +24,22 @@ class Graph implements IGraph {
     private static final int SECONDS_TO_SHOW = 10;
 
     private final Random mRandom;
+    private final TextView mSensorNotSupportedTV;
     private float mHue;
     private long mStartTime = SystemClock.elapsedRealtimeNanos();
     private final GraphView mGraphView;
     private final List<LineGraphSeries<DataPoint>> mSeries = new ArrayList<>();
 
-    Graph(@NonNull final GraphView graphView) {
+    Graph(@NonNull final GraphView graphView, @NonNull final TextView sensorNotSupportedTV) {
         mRandom = new Random();
         mGraphView = graphView;
+        mSensorNotSupportedTV = sensorNotSupportedTV;
+
         mGraphView.getViewport().setXAxisBoundsManual(true);
         mGraphView.getViewport().setMinX(0);
         mGraphView.getViewport().setMaxX(SECONDS_TO_SHOW);
 
-        mGraphView.getLegendRenderer().setVisible(true);
+        setLegendVisibility(false);
         mGraphView.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
 
         mStartTime = SystemClock.elapsedRealtimeNanos();
@@ -49,6 +54,7 @@ class Graph implements IGraph {
         final Optional<String[]> legend = Optional.fromNullable(SensorValueLegend.getDescriptionsShort(sensorType));
         if (legend.isPresent()) {
             if (mSeries.isEmpty()) {
+                mSensorNotSupportedTV.setVisibility(View.INVISIBLE);
                 setLegendVisibility(true);
                 fillSeries(legend.get());
             }
@@ -56,6 +62,8 @@ class Graph implements IGraph {
             for (int i = 0; i < legend.get().length; i++) {
                 mSeries.get(i).appendData(new DataPoint(seconds, sensorValues[i]), true, 1000);
             }
+        } else {
+            mSensorNotSupportedTV.setVisibility(View.VISIBLE);
         }
     }
 
@@ -75,12 +83,12 @@ class Graph implements IGraph {
     public void reset() {
         mSeries.clear();
         mGraphView.removeAllSeries();
+        setLegendVisibility(false);
 
         mStartTime = SystemClock.elapsedRealtimeNanos();
     }
 
-    @Override
-    public void setLegendVisibility(final boolean visibility) {
+    private void setLegendVisibility(final boolean visibility) {
         mGraphView.getLegendRenderer().setVisible(visibility);
     }
 

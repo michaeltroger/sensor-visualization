@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         binding.setHandlers(new MyHandlers());
 
-        mGraph = new Graph(binding.graph);
+        mGraph = new Graph(binding.graph, binding.sensorNotSupported);
 
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         final List<Sensor> sensors = mSensorManager.getSensorList(Sensor.TYPE_ALL);
@@ -59,7 +59,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 mSensor = sensor;
                 mSensorManager.registerListener(MainActivity.this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
                 mGraph.reset();
-                mGraph.setLegendVisibility(false);
             });
         }
     }
