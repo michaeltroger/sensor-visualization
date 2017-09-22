@@ -39,7 +39,8 @@ dependencies {
     })
     testCompile 'junit:junit:4.12'
 
-    compile 'com.michaeltroger.sensorvaluelegend:sensorvaluelegend:1.0.0'
+    compile 'com.google.guava:guava:23.0-android'
+    compile 'com.michaeltroger.sensorvaluelegend:sensorvaluelegend:1.0.2'
     compile 'com.android.support:appcompat-v7:26.0.2'
     compile 'com.jjoe64:graphview:4.2.1'
     compile 'de.psdev.licensesdialog:licensesdialog:1.8.2'

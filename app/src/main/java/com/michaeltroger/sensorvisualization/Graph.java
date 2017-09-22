@@ -5,6 +5,7 @@ import android.hardware.SensorEvent;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 
+import com.google.common.base.Optional;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.series.DataPoint;
@@ -44,19 +45,21 @@ class Graph implements IGraph {
         final long nanoseconds = event.timestamp;
         final float[] sensorValues = event.values;
         final int sensorType = event.sensor.getType();
-        if (mSeries.isEmpty()) {
-            fillSeries(sensorValues, sensorType);
-        }
-        final float seconds = (nanoseconds - mStartTime) / 1000000000f;
-        for (int i = 0; i < sensorValues.length; i++) {
-            mSeries.get(i).appendData(new DataPoint(seconds, sensorValues[i]), true, 1000);
+
+        final Optional<String[]> legend = Optional.fromNullable(SensorValueLegend.getDescriptionsShort(sensorType));
+        if (legend.isPresent()) {
+            if (mSeries.isEmpty()) {
+                fillSeries(sensorValues, legend.get());
+            }
+            final float seconds = (nanoseconds - mStartTime) / 1000000000f;
+            for (int i = 0; i < legend.get().length; i++) {
+                mSeries.get(i).appendData(new DataPoint(seconds, sensorValues[i]), true, 1000);
+            }
         }
     }
 
-    private void fillSeries(@NonNull final float[] sensorValues, final int sensorType) {
-        final String[] legend = SensorValueLegend.getLegend(sensorType);
-
-        for (int i = 0; i < sensorValues.length; i++) {
+    private void fillSeries(@NonNull final float[] sensorValues, @NonNull final String[] legend) {
+        for (int i = 0; i < legend.length; i++) {
             final LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
             series.setColor(getRandomColor());
             if (i < legend.length) {
