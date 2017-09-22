@@ -49,7 +49,8 @@ class Graph implements IGraph {
         final Optional<String[]> legend = Optional.fromNullable(SensorValueLegend.getDescriptionsShort(sensorType));
         if (legend.isPresent()) {
             if (mSeries.isEmpty()) {
-                fillSeries(sensorValues, legend.get());
+                setLegendVisibility(true);
+                fillSeries(legend.get());
             }
             final float seconds = (nanoseconds - mStartTime) / 1000000000f;
             for (int i = 0; i < legend.get().length; i++) {
@@ -58,13 +59,11 @@ class Graph implements IGraph {
         }
     }
 
-    private void fillSeries(@NonNull final float[] sensorValues, @NonNull final String[] legend) {
-        for (int i = 0; i < legend.length; i++) {
+    private void fillSeries(@NonNull final String[] legend) {
+        for (final String aLegend : legend) {
             final LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
             series.setColor(getRandomColor());
-            if (i < legend.length) {
-                series.setTitle(legend[i]);
-            }
+            series.setTitle(aLegend);
 
             mSeries.add(series);
             mGraphView.addSeries(series);
@@ -78,6 +77,11 @@ class Graph implements IGraph {
         mGraphView.removeAllSeries();
 
         mStartTime = SystemClock.elapsedRealtimeNanos();
+    }
+
+    @Override
+    public void setLegendVisibility(final boolean visibility) {
+        mGraphView.getLegendRenderer().setVisible(visibility);
     }
 
     private int getRandomColor() {

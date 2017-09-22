@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 mSensor = sensor;
                 mSensorManager.registerListener(MainActivity.this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
                 mGraph.reset();
+                mGraph.setLegendVisibility(false);
             });
         }
     }
