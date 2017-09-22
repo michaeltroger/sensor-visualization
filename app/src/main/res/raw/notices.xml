@@ -7,4 +7,15 @@
         <copyright>Copyright 2016 Jonas Gehring</copyright>
         <license>Apache Software License 2.0</license>
     </notice>
+    <notice>
+        <name>Guava</name>
+        <url>https://github.com/google/guava</url>
+        <license>Apache Software License 2.0</license>
+    </notice>
+    <notice>
+        <name>Sensor Value Legend</name>
+        <url>https://github.com/michaeltroger/sensorvaluelegend</url>
+        <copyright>Copyright 2017 Michael Troger</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
 </notices>
